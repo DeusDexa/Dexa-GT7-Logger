@@ -11,7 +11,7 @@ It records key data like **lap times**, **fuel usage**, **speed**, **vehicle pos
 
 * 📦 Reads live UDP packets from GT7 on port `33740`
 * ⛽ Reliably calculates **fuel consumption**, including pit stop handling
-* 🏎️ Logs lap times, positions, speed data, and more
+* 🏎️ Logs lap times, speed data, fuel consumption and more
 * 📉 Outputs as plain text or for further analysis in tools like Streamlit or Excel
 * 📂 Supports structured log file format
 * ✅ Tracks values like `fuel_start_of_lap`, `fuel_used`, `best_lap`, `total_time`, and other telemetry fields
@@ -62,6 +62,9 @@ Lap  Pos  Laptime   Fuel_Used  Max_Speed  Min_Speed
 
 You can add a screenshot or terminal output image here (hosted via Imgur if needed).
 
+![Laptimes & fuel](https://i.imgur.com/oXZ4QUi.png)
+
+![Laptimes & fuel](https://i.imgur.com/08a0wwI.png)
 ---
 
 ## ❓ Questions or Ideas?
@@ -78,6 +81,10 @@ MIT License – see `LICENSE`
 ---
 
 ## 🙏 Credits
+
+This project is based on the excellent [raw-sim-telemetry](https://github.com/GeekyDeaks/raw-sim-telemetry) by [@GeekyDeaks](https://github.com/GeekyDeaks).  
+Many thanks for the original structure and for sharing the code openly!
+
 
 * [Nenkai](https://github.com/Nenkai) for insights into GT7 packet structures
 * Gran Turismo™ – Polyphony Digital
