@@ -64,7 +64,8 @@ You can add a screenshot or terminal output image here (hosted via Imgur if need
 
 ![Laptimes & fuel](https://i.imgur.com/oXZ4QUi.png)
 
-![Laptimes & fuel](https://i.imgur.com/08a0wwI.png)
+![laptime / Fuel](https://i.imgur.com/bObTK3Y.png)
+
 ---
 
 ## ❓ Questions or Ideas?
