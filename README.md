@@ -38,7 +38,7 @@ Ensure your PC is on the same network.
 Run the script:
 
 ```bash
-python logger_gt7_dexa.py <IP address of your PlayStation>
+python logger_gt7_dexa.py <IP address of your PlayStation> [nogfx]
 ```
 
 Data will be saved as `.txt` files in the `/logs/` folder.
