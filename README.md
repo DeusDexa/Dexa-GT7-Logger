@@ -1,41 +1,54 @@
-# Dexa GT7 Logger 🏁
+# Dexa GT7 Logger 🏎️
+ *"Every millisecond tells a story. I just write it down."*
 
-Ein moderner, modularer Telemetrie-Logger für **Gran Turismo 7** – entwickelt zur präzisen Aufzeichnung und Analyse von Renndaten über das UDP-Protokoll.  
-Erfasst u.a. **Rundenzeiten**, **Spritverbrauch**, **Geschwindigkeiten**, **Fahrzeugpositionen** und ermöglicht einfache Erweiterung für weitere Daten.
-
----
-
-## 🚀 Funktionen
-
-- 📦 Liest UDP-Datenpakete live von GT7 über Port `33740`
-- ⛽ Berechnet zuverlässig den **Spritverbrauch**, inkl. Boxenrunden-Handling
-- 🏁 Speichert Rundenzeiten, Position, Speed-Daten u.v.m.
-- 📉 Ausgabe in Textformat oder zur Weiterverarbeitung in Tools wie Streamlit oder Excel
-- 📂 Unterstützung für strukturiertes Log-File-Format
-- ✅ Unterstützt `fuel_start_of_lap`, `fuel_used`, `best_lap`, `total_time` und weitere Telemetriedaten
+A modern, modular telemetry logger for **Gran Turismo 7** – built to precisely capture and analyze race data via the UDP protocol.
+It records key data like **lap times**, **fuel usage**, **speed**, **vehicle position**, and is designed to be easily extended.
+"This is my logger. There are many like it, but this one is mine." 
 
 ---
 
-## 📦 Voraussetzungen
+## 🚀 Features
 
-- Python 3.10 oder höher
-- Empfohlene Bibliotheken:
+* 📦 Reads live UDP packets from GT7 on port `33740`
+* ⛽ Reliably calculates **fuel consumption**, including pit stop handling
+* 🏎️ Logs lap times, positions, speed data, and more
+* 📉 Outputs as plain text or for further analysis in tools like Streamlit or Excel
+* 📂 Supports structured log file format
+* ✅ Tracks values like `fuel_start_of_lap`, `fuel_used`, `best_lap`, `total_time`, and other telemetry fields
 
-```
+---
+
+## 📦 Requirements
+
+* Python 3.10 or higher
+* Recommended libraries:
+
+```bash
 pip install -r requirements.txt
 ```
-⚙️ Verwendung
-Starte GT7 auf der PS5 mit aktiviertem UDP-Telemetrieausgang
 
-Stelle sicher, dass dein PC im selben Netzwerk ist
+---
 
-Starte das Skript:
+## ⚙️ Usage
+
+Start GT7 on your PS5 with UDP telemetry output enabled.
+
+Ensure your PC is on the same network.
+
+Run the script:
+
+```bash
+python logger_gt7_dexa.py <IP address of your PlayStation>
 ```
-python logger_gt7_dexa.py  IP-Adresse der Playstation 
-```
-Die Daten werden in /logs/ als .txt gespeichert
 
-🧪 Beispielausgabe
+Data will be saved as `.txt` files in the `/logs/` folder.
+
+"Debugger? I log and pray."
+
+---
+
+## 🧪 Sample Output
+
 ```
 Lap  Pos  Laptime   Fuel_Used  Max_Speed  Min_Speed
 1    3    01:37.532    3.41        216        94
@@ -43,21 +56,28 @@ Lap  Pos  Laptime   Fuel_Used  Max_Speed  Min_Speed
 3    3    01:37.104    3.48        222        93
 ```
 
+---
 
+## 📸 Preview / Screenshots
 
+You can add a screenshot or terminal output image here (hosted via Imgur if needed).
 
-📸 Vorschau / Screenshots
-Hier könnte ein Screenshot oder eine Textgrafik hin (ggf. verlinkt über Imgur)
+---
 
-❓ Fragen oder Ideen?
-Ich bin immer offen für Tipps, wie man weitere oder andere Daten aus GT7 extrahieren kann – sei es über versteckte Pakete, kreative Umwege oder eigene Tools.
-→ Issues oder direkt über einen PR! 😄
+## ❓ Questions or Ideas?
 
-📄 Lizenz
-MIT License – siehe LICENSE
+Always open to tips on how to extract **more or different data from GT7** – whether it's hidden packet content, creative workarounds, or your own tools.
+→ Open an Issue or send a PR! 😄
 
-🙏 Credits
-Nenkai für das Verständnis der GT7-Paketstruktur
+---
 
-Gran Turismo™ – Polyphony Digital
+## 📄 License
 
+MIT License – see `LICENSE`
+
+---
+
+## 🙏 Credits
+
+* [Nenkai](https://github.com/Nenkai) for insights into GT7 packet structures
+* Gran Turismo™ – Polyphony Digital
