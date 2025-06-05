@@ -60,7 +60,7 @@ Lap  Pos  Laptime   Fuel_Used  Max_Speed  Min_Speed
 
 ## 📸 Preview / Screenshots
 
-Hier einige Screenshots zur veranschulichung.
+A few screenshots to illustrate what’s going on.
 
 ![Laptimes & fuel](https://i.imgur.com/oXZ4QUi.png)
 
