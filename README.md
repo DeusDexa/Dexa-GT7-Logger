@@ -64,7 +64,7 @@ A few screenshots to illustrate what’s going on.
 
 ![Laptimes & fuel](https://i.imgur.com/oXZ4QUi.png)
 
-![laptime / Fuel](https://github.com/DeusDexa/Dexa-GT7-Logger/blob/main/images/lap_fuel_overlay.png)
+![laptime / Fuel](https://github.com/DeusDexa/Dexa-GT7-Logger/blob/main/images/summary-lap_fuel.png)
 
 ---
 
