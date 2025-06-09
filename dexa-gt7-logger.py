@@ -11,19 +11,33 @@ import socket
 import sys
 import struct
 import os
-import datetime
-import traceback
+#import datetime
 import subprocess
-import os
 import traceback
+
 from salsa20 import Salsa20_xor
 from collections import deque
-from pathlib import Path
-import sys
-import traceback
 from typing import List
 import matplotlib.pyplot as plt
-from matplotlib.ticker import FuncFormatter 
+from matplotlib.ticker import FuncFormatter
+from matplotlib.patches import Rectangle 
+from matplotlib.font_manager import FontProperties
+from random import randint, uniform
+from datetime import datetime
+
+# Konfiguration
+MATPLOTLIB_STYLE = 'ggplot'
+dejavu_font = FontProperties(family="DejaVu Sans")
+
+GGPLOT_THEME = {
+    "lap_color": "#FFA500",
+    "fuel_color": "#2ca02c",
+    "bestlap_color": "#FFD700",
+    "max_speed_color": "#1f77b4",
+    "min_speed_color": "#d62728",
+    "text_color": "black"
+}
+
 
 def global_exception_handler(exc_type, exc_value, exc_traceback):
     print("🚨 Unbehandelter Fehler:")
@@ -53,7 +67,7 @@ current_laptime = 0
 race_start_menu = False
 main_menu = False
 start_pos:int = 0
-race_id = f"Race_ID_{datetime.datetime.now():%Y%m%d%H%M%S}"
+race_id = f"Race_ID_{datetime.now():%Y%m%d%H%M%S}"
 current_lap_speeds: List[int] = []
 
 SendDelaySeconds = 10
@@ -67,7 +81,7 @@ pknt = 0
 # falls keine übergeben wurde prüfen ob meine PS5 da ist
 # Sonst abbruch     
 # Standardwerte
-ip = "192.168.178.66"
+ip = "192.168.178.27"
 enable_graphics = True
 
 # Parameter auswerten
@@ -185,74 +199,98 @@ def save_race_summary(logpath: str, lap_history: list, start_pos:int, race_id):
             race_daten = f"{race_id}  00:{total_time_str}	00:{best_lap} 	{overall_min} 	{overall_max}	{overall_avg_speed:.0f}	{start_pos:02}	{pos_finish:02}   {avg_fuel:.2f}"
             f.write(f"{race_daten}\n")
     if enable_graphics:
-        generate_graphics(logpath, lap_history)
+        generate_graphics(logpath, lap_history, GGPLOT_THEME, race_id)
 
 
-def generate_graphics(logpath: str, lap_history: list):
+# Chart (s) anlegen 
+def generate_graphics(logpath: str, lap_history: list, theme: dict, race_id, chunk_size: int = 12):
     if not lap_history:
         return
+    os.makedirs(logpath, exist_ok=True)
 
-    # Daten vorbereiten
-    lap_nums = [entry["lap"] for entry in lap_history]
-    lap_times_ms = [timestr_to_ms(entry["laptime"]) for entry in lap_history]  # bleibt in ms
-    fuel_used = [entry["fuel_used"] for entry in lap_history]
+    timestamp_str = race_id.split("_")[-1] # Zeitstempel extrahieren (nach dem letzten Unterstrich) 
+    dt = datetime.strptime(timestamp_str, "%Y%m%d%H%M%S") # In datetime-Objekt umwandeln 
+    race_date_str = dt.strftime("%d.%m.%Y %H.%M")  # Formatieren in "tt.mm.jjjj hh.mm"
 
-    # Formatter für Laptimes (Y-Achse)
-    time_formatter = FuncFormatter(lambda y, _: ms_to_timestr(int(y)))
+    for i in range(0, len(lap_history), chunk_size):
+        chunk = lap_history[i:i + chunk_size]
+        suffix = f"{chunk[0]['lap']:02d}-{chunk[-1]['lap']:02d}"
+        chunk_logpath = os.path.join(logpath, f"lap_fuel_ggplot_{suffix}.png")
+        print(f"Saving chunk: {chunk_logpath}")
+        _render_graphic(chunk_logpath, chunk, theme, race_date_str)
 
-    # --- Lap Time Plot ---
-    plt.figure()
-    plt.bar(lap_nums, lap_times_ms, width=0.6, color="skyblue")
-    plt.xticks(lap_nums)
-    plt.gca().yaxis.set_major_formatter(time_formatter)
-    plt.title("Lap Time per Lap")
-    plt.xlabel("Lap")
-    plt.ylabel("Time (MM:SS:hhh)")
-    plt.grid(True, axis="y", linestyle="--", alpha=0.6)
-    plt.tight_layout()
-    plt.savefig(os.path.join(logpath, "lap_times.png"))
+def _render_graphic(filename: str, lap_history: list, theme: dict, race_date_str: str):
+    plt.style.use(MATPLOTLIB_STYLE)
+    plt.rcParams['axes.grid'] = False
 
-    # --- Fuel Used Plot ---
-    plt.figure()
-    plt.bar(lap_nums, fuel_used, width=0.6, color="lightgreen")
-    plt.xticks(lap_nums)
-    plt.title("Fuel Used per Lap")
-    plt.xlabel("Lap")
-    plt.ylabel("Fuel (L)")
-    plt.grid(True, axis="y", linestyle="--", alpha=0.6)
-    plt.tight_layout()
-    plt.savefig(os.path.join(logpath, "fuel_usage.png"))
-
-    # Combined graphics fuel/laptimes 
     lap_nums = [entry["lap"] for entry in lap_history]
     lap_times_ms = [timestr_to_ms(entry["laptime"]) for entry in lap_history]
     fuel_used = [entry["fuel_used"] for entry in lap_history]
 
-    fig, axs = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
-    fig.suptitle("Lap Times & Fuel Usage", fontsize=14)
+    fig, ax1 = plt.subplots(figsize=(12, 6))
 
-    # --- Laptime
-    axs[0].bar(lap_nums, lap_times_ms, width=0.6, color="skyblue")
-    axs[0].set_ylabel("Time (MM:SS,mmm)")
-    axs[0].yaxis.set_major_formatter(FuncFormatter(lambda y, _: ms_to_timestr(int(y))))
-    axs[0].grid(True, axis="y", linestyle="--", alpha=0.6)
-    axs[0].set_title("Lap Time")
+    bar_width_lap = 0.6
+    bar_width_fuel = 0.3
+    bar_offset = bar_width_fuel / 2
 
-    # --- Fuel
-    axs[1].bar(lap_nums, fuel_used, width=0.6, color="lightgreen")
-    axs[1].set_xlabel("Lap")
-    axs[1].set_ylabel("Fuel (L)")
-    axs[1].grid(True, axis="y", linestyle="--", alpha=0.6)
-    axs[1].set_title("Fuel Used")
+    bar_lap = ax1.bar(
+        [x - bar_offset for x in lap_nums],
+        lap_times_ms,
+        width=bar_width_lap,
+        color=theme["lap_color"],
+        edgecolor="black",
+        linewidth=0.5,
+        zorder=3
+    )
 
-    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-    plt.savefig(os.path.join(logpath, "lap_fuel_combined.png"))
+    ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: ms_to_timestr(int(y))))
+    ax1.set_ylabel("Lap Time (mm:ss,ms)", color=theme["text_color"])
+    ax1.set_xlabel("Lap", color=theme["text_color"])
+
+    ax2 = ax1.twinx()
+    bar_fuel = ax2.bar(
+        [x + bar_offset for x in lap_nums],
+        fuel_used,
+        width=bar_width_fuel,
+        color=theme["fuel_color"],
+        edgecolor="black",
+        linewidth=0.5,
+        zorder=3
+    )
+
+    ax2.set_ylabel("Fuel Used (L)", color=theme["text_color"])
+
+    ax1.set_xticks(lap_nums)
+    ax1.tick_params(colors=theme["text_color"])
+    ax2.tick_params(colors=theme["text_color"])
+
+    fig.suptitle(f"Lap Time and Fuel Usage - {race_date_str}", fontsize=14, color=theme["text_color"])
+
+    best_lap_time = min(lap_times_ms)
+    for bar, entry, lap_time in zip(bar_lap, lap_history, lap_times_ms):
+        x = bar.get_x() + bar.get_width() / 2
+        y = bar.get_height()
+        ax1.text(x, y + 500, f"▲ {entry['max_speed']} km/h", ha='center', va='bottom', fontsize=7, color=theme["max_speed_color"], zorder=4)
+        ax1.text(x, y - 1500, f"▼ {entry['min_speed']} km/h", ha='center', va='top', fontsize=7, color=theme["min_speed_color"], zorder=4)
+        if lap_time == best_lap_time:
+            ax1.text(x, y + 2500, "★ Best", ha='center', va='bottom', fontsize=10, color=theme["bestlap_color"], fontproperties=dejavu_font, zorder=4)
+
+    fig.text(0.4, 0.07, "Lap Time", ha="center", va="center", fontsize=10,
+             bbox=dict(facecolor=theme["lap_color"], edgecolor="black", boxstyle="round,pad=0.4"))
+    fig.text(0.6, 0.07, "Fuel Used", ha="center", va="center", fontsize=10,
+             bbox=dict(facecolor=theme["fuel_color"], edgecolor="black", boxstyle="round,pad=0.4"))
+
+    plt.tight_layout(rect=[0.05, 0.08, 0.95, 0.95])
+    plt.subplots_adjust(bottom=0.18)
+
+    fig.patches.append(
+        Rectangle((0, 0), 1, 1, transform=fig.transFigure,
+                  facecolor='none', edgecolor='gray', linewidth=1)
+    )
+
+    plt.savefig(filename, dpi=300)
     plt.close()
-
-
-
-    plt.close("all")
-
+    
 
 
 def clear():
@@ -291,7 +329,7 @@ def timestr_to_ms(s: str) -> int:
 
 def create_log_dir(base_path="log\gt7"):
     # Erstellt ein neues Log-Verzeichnis mit Zeitstempel und gibt den Pfad zurück.
-    timestamp = datetime.datetime.now().replace(microsecond=0).isoformat().replace('-', '').replace(':', '')
+    timestamp = datetime.now().replace(microsecond=0).isoformat().replace('-', '').replace(':', '')
     logpath = os.path.join(base_path, timestamp)
     os.makedirs(logpath, exist_ok=True)
     log_lines.append(f"📂 Neues Logverzeichnis erstellt: {logpath}")
@@ -385,7 +423,7 @@ def send_hb(s):
     s.sendto(send_data.encode('utf-8'), (ip, SendPort))
 
 send_hb(s)
-
+# Main Loop 
 try:
     while True:
         try:
@@ -519,7 +557,7 @@ try:
                 #
                 if lap == 1 and not paket1_lap1_done and not race_start_menu:
                      # nur beim ersten Datensatz lap == 1 ausführen zu Beginn eines Rennens
-                    race_id = f"Race_ID_{datetime.datetime.now():%Y%m%d%H%M%S}"
+                    race_id = f"Race_ID_{datetime.now():%Y%m%d%H%M%S}"
                     start_pos:int = my_pos # Startposition merken 
                     #fuel_start_of_lap = None  ###????????? müsste =fuel sein  
                     fuel_start_of_lap = fuel 
