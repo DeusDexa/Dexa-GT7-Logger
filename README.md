@@ -1,9 +1,15 @@
 # Dexa GT7 Logger 🏎️
- *"Every millisecond tells a story. I just write it down."*
+"Every millisecond tells a story. I just write it down."
 
-A modern, modular telemetry logger for **Gran Turismo 7** – built to precisely capture and analyze race data via the UDP protocol.
-It records key data like **lap times**, **fuel usage**, **speed**, **vehicle position**, and is designed to be easily extended.
-"This is my logger. There are many like it, but this one is mine." 
+A modern, modular telemetry logger for Gran Turismo 7 – built to precisely capture and analyze race data via the UDP protocol. It records key metrics such as lap times, fuel usage, speed, and vehicle position, and is structured for future extension.
+
+🛠️ Yes, I know there are already many GT7 loggers out there.
+But this one was about something else for me.
+
+I wanted a tool that gives me a reliable summary after every single race, without missing laps or failing on pit stops. And honestly – I hadn't written a single line of code in over 20 years. This project was a personal challenge: How far can I get with ChatGPT at my side?
+Pretty far, I'd say. 😊
+
+"This is my logger. There are many like it, but this one is mine."
 
 ---
 
@@ -38,7 +44,7 @@ Ensure your PC is on the same network.
 Run the script:
 
 ```bash
-python logger_gt7_dexa.py <IP address of your PlayStation> [nogfx]
+python dexa-gt7-logger.py <IP address of your PlayStation> [nogfx]
 ```
 
 Data will be saved as `.txt` files in the `/logs/` folder.
@@ -50,10 +56,16 @@ Data will be saved as `.txt` files in the `/logs/` folder.
 ## 🧪 Sample Output
 
 ```
-Lap  Pos  Laptime   Fuel_Used  Max_Speed  Min_Speed
-1    3    01:37.532    3.41        216        94
-2    3    01:38.008    1.02        220        91  
-3    3    01:37.104    3.48        222        93
+Pos	Lap	Laptime		Fuel	Max	Min	Avg
+05	001	01:52,496	1.58	216	58	147
+05	002	01:44,266	1.53	216	62	149
+05	003	01:43,843	1.49	216	67	149
+04	004	01:45,272	1.52	213	60	147
+04	005	01:44,663	1.58	214	60	148
+ 
+Race_ID                 Dauer           BestLap        min     max        avg   PS    PF  fuelavg
+Race_ID_20250609171214  00:08:50,540	00:01:43,843 	58 	216	148	07	04   1.54
+
 ```
 
 ---
