@@ -1,4 +1,4 @@
-# Dexa GT7 Logger 🏎️
+# PGG GT7 Logger 🏎️
 "Every millisecond tells a story. I just write it down."
 
 A modern, modular telemetry logger for Gran Turismo 7 – built to precisely capture and analyze race data via the UDP protocol. It records key metrics such as lap times, fuel usage, speed, and vehicle position, and is structured for future extension.
@@ -44,7 +44,7 @@ Ensure your PC is on the same network.
 Run the script:
 
 ```bash
-python dexa-gt7-logger.py <IP address of your PlayStation> [nogfx]
+python PGG-gt7-logger.py <IP address of your PlayStation> [nogfx]
 ```
 
 Data will be saved as `.txt` files in the `/logs/` folder.
