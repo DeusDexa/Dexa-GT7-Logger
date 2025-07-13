@@ -3,13 +3,13 @@
 
 A modern, modular telemetry logger for Gran Turismo 7 – built to precisely capture and analyze race data via the UDP protocol. It records key metrics such as lap times, fuel usage, speed, and vehicle position, and is structured for future extension.
 
-🛠️ Yes, I know there are already many GT7 loggers out there.
-But this one was about something else for me.
+🛠️ Sure, there are already plenty of GT7 loggers out there. But this one? This one is for our PGG Community.  
+Find us on Discord: [PGG Community](https://discord.gg/BJRVa4YDjF)
 
-I wanted a tool that gives me a reliable summary after every single race, without missing laps or failing on pit stops. And honestly – I hadn't written a single line of code in over 20 years. This project was a personal challenge: How far can I get with ChatGPT at my side?
-Pretty far, I'd say. 😊
+I wanted a tool that delivers a reliable summary after every race – no missing laps, no pit stop chaos.
+And honestly? I hadn’t touched code in over 20 years. This project was my way back – a challenge, a learning journey, and something built with the community, for the community.
 
-"This is my logger. There are many like it, but this one is mine."
+"This is my logger. There are many like it, but this one is ours."
 
 ---
 
